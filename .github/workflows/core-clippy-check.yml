@@ -2,12 +2,13 @@ name: Core - Clippy Check
 
 on:
   workflow_dispatch:
+  workflow_call:
     inputs:
       addArg:
         description: 'Optional arguments for Clippy Check'
         required: false
-        default: '' 
-  workflow_call:
+        default: ''
+        type: string
 
 env:
   CARGO_TERM_COLOR: always
