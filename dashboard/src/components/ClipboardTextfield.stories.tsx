@@ -21,3 +21,5 @@ Small.args = {
   text: 'Hello World',
   className: 'text-regular text-gray-300',
 };
+
+const mine = 'hi';
