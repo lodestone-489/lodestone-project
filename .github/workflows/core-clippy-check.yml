@@ -2,6 +2,11 @@ name: Core - Clippy Check
 
 on:
   workflow_dispatch:
+    inputs:
+      addArg:
+        description: 'Optional arguments for Clippy Check'
+        required: false
+        default: '' 
   workflow_call:
 
 env:
@@ -29,4 +34,4 @@ jobs:
         uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --all-features --release
+          args: --all-features --release ${{ github.event.inputs.addArg }}
