@@ -36,5 +36,5 @@ jobs:
     needs: workspace-check
     uses: ./.github/workflows/core-clippy-check.yml
     with:
-      addArg: "-p lodestone-client"
+      addArg: "--workspace"
   
