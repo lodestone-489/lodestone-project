@@ -23,4 +23,3 @@ Small.args = {
 };
 
 const mine = 'hi';
-const mine2 = 'hi';
