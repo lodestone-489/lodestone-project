@@ -16,3 +16,5 @@ export default function DashboardCard({
     </div>
   );
 }
+
+const mine = 'hi';
