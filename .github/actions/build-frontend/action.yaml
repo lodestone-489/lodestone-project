@@ -39,5 +39,5 @@ runs:
     - name: Clippy check
       uses: ./.github/actions/clippy-check
       with:
-        token: ${{ input.token }}
+        token: ${{ inputs.token }}
         addArg: ${{ inputs.addArg }}
