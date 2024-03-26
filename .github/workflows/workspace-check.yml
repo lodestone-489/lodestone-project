@@ -35,5 +35,6 @@ jobs:
       - name: Clippy check
         uses: ./.github/actions/clippy-check
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           addArg: "--workspace"
   

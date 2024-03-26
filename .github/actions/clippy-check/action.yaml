@@ -1,5 +1,9 @@
 name: Core - Clippy Check
 inputs:
+  token:
+    description: 'GitHub Token'
+    required: true
+    type: string
   addArg:
     description: 'Optional arguments for Clippy Check'
     required: false
@@ -28,5 +32,5 @@ runs:
       env:
         CARGO_TERM_COLOR: always
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ inputs.token }}
         args: --all-features --release ${{ inputs.addArg }}
