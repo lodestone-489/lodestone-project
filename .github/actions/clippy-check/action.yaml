@@ -1,4 +1,4 @@
-name: Core - Clippy Check
+name: Clippy Check
 inputs:
   token:
     description: 'GitHub Token'
