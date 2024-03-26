@@ -1,0 +1,5 @@
+#!/bin/sh
+chmod +x commit-msg
+chmod +x pre-push
+cp commit-msg ../.git/hooks/
+cp pre-push ../.git/hooks/
