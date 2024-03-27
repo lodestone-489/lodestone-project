@@ -3,6 +3,12 @@ name: Core - Clippy Check
 on:
   workflow_dispatch:
   workflow_call:
+    inputs:
+      addArg:
+        description: 'Optional arguments for Clippy Check'
+        required: false
+        default: ''
+        type: string
 
 env:
   CARGO_TERM_COLOR: always
@@ -11,13 +17,13 @@ jobs:
   core-clippy-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - uses: actions-rs/toolchain@v1
+      - name: Install Rust stable
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          components: clippy
-          override: true
 
       - name: Cache Dependencies
         uses: Swatinem/rust-cache@v2
@@ -29,4 +35,4 @@ jobs:
         uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --all-features --release
+          args: --all-features --release ${{ inputs.addArg }}

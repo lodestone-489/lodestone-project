@@ -1,0 +1,43 @@
+name: Build Frontend
+inputs:
+  token:
+    description: 'GitHub Token'
+    required: true
+    type: string
+  addArg:
+    description: 'Optional arguments for Clippy Check'
+    required: false
+    default: ''
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+        cache-dependency-path: ./dashboard/package-lock.json
+
+    - name: Install dependencies
+      shell: bash
+      run: npm ci
+      working-directory: ./dashboard
+
+    - name: Build dashboard
+      shell: bash
+      run: npm run build --if-present
+      working-directory: ./dashboard
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
+
+    - name: Clippy check
+      uses: ./.github/actions/clippy-check
+      with:
+        token: ${{ inputs.token }}
+        addArg: ${{ inputs.addArg }}

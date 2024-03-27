@@ -1,0 +1,31 @@
+name: Clippy Check
+inputs:
+  token:
+    description: 'GitHub Token'
+    required: true
+    type: string
+  addArg:
+    description: 'Optional arguments for Clippy Check'
+    required: false
+    default: ''
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Rust stable
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+
+    - name: Cache Dependencies
+      uses: Swatinem/rust-cache@v2
+      with:
+        prefix-key: rust-cache
+        shared-key: workspace-x86_64-unknown-linux-gnu-release-check
+
+    - name: Run Clippy Check
+      uses: actions-rs/clippy-check@v1
+      with:
+        token: ${{ inputs.token }}
+        args: --all-features --release ${{ inputs.addArg }}
