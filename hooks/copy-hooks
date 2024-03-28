@@ -1,0 +1,3 @@
+#!/bin/sh
+chmod +x commit-msg
+cp commit-msg ../.git/hooks/
