@@ -22,7 +22,7 @@ If a PR contains changes to the dashboard’s codebase, the Netlify bot will pub
 
 Lodestone’s PRs do not adhere to a specific format, leading to a variety of formats being used by individual contributors with varying readability. Each PR needs at least one manual approval from another maintainer and must pass all the release pipeline checks before it can be merged.
 
-{!.github/README.md!}
+{!.github/workflows/README.md!}
 
 The above documentation on Github Actions workflows are also visible in the `.github` directory on the [GitHub repo](https://github.com/Lodestone-Team/lodestone/.github/README.md).
 
