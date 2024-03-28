@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+import sys
+import re
+
+def main():
+    # Read the commit message from the file
+    with open(sys.argv[1], 'r') as commit_msg_file:
+        commit_msg = commit_msg_file.read().strip()
+
+    # Define the regex pattern to match the commit message style
+    pattern = r'^\[\d+\].+'
+
+    # Check if the commit message matches the pattern
+    if not re.match(pattern, commit_msg):
+        print("Commit message does not match the required style.")
+        sys.exit(1)  # Exit with a non-zero status code to indicate failure
+
+    sys.exit(0)  # Exit with a zero status code to indicate success
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+import subprocess
+import sys
+import os
+
+def run_linter(directory, linter, changed_files):
+    current_directory = os.getcwd()
+    os.chdir(directory)
+    changed_files_str = ' '.join(changed_files)
+    result = subprocess.run(f'{linter} {changed_files_str}', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    os.chdir(current_directory)
+    return result.stdout.decode('utf-8'), result.stderr.decode('utf-8'), result.returncode
+
+def get_files_in_commits(local_oid, remote_oid):
+    commit_range = f"{remote_oid}..{local_oid}"
+    commit_list_cmd = f"git show --pretty=format:%n --name-only {commit_range}"
+    commit_list_output = subprocess.run(commit_list_cmd, shell=True, capture_output=True, text=True)
+    # Split the output into individual commits
+
+    files_in_commits = []
+    for line in commit_list_output.stdout.strip().split('\n'):
+        if line.startswith("dashboard/"):
+            files_in_commits.append(line[len('dashboard/'):])
+    
+    return files_in_commits
+
+def main():
+
+    dashboard_files_in_commits = []
+    for line in sys.stdin:
+        local_ref, local_oid, remote_ref, remote_oid = line.strip().split()
+
+        # Get the list of files modified in the commits being pushed
+        files_returned = get_files_in_commits(local_oid, remote_oid)
+        
+        for file in files_returned:
+            dashboard_files_in_commits.append(file)
+
+    # Define paths to core and dashboard directories
+    dashboard_dir = 'dashboard'
+
+    # Run ESLint on changed files in dashboard directory
+    if len(dashboard_files_in_commits) > 0:
+        print("Running ESLint on dashboard directory...")
+        dashboard_stdout, dashboard_stderr, dashboard_exit_code = run_linter(dashboard_dir, 'npx eslint --max-warnings 0', dashboard_files_in_commits)
+
+        if dashboard_exit_code != 0:
+            print("ESLint found errors or warnings in the dashboard directory: ", dashboard_stdout.strip())
+            sys.exit(1)
+
+    sys.exit(0)
+
+if __name__ == "__main__":
+    main()
