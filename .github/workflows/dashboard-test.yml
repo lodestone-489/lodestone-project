@@ -1,0 +1,36 @@
+name: Dashboard - Test Frontend
+
+on: 
+  push:
+    branches:
+        - main
+        - dev
+        - feature/*
+
+jobs:
+  dashboard-test-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'npm'
+          cache-dependency-path: ./dashboard/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./dashboard
+
+      - name: Test dashboard
+        env:
+          DD_CIVISIBILITY_AGENTLESS_ENABLED: true
+          DD_API_KEY: ${{ secrets.DATADOG_TEST_API_KEY }}
+          DD_SITE: us5.datadoghq.com
+        run: NODE_OPTIONS="-r dd-trace/ci/init" DD_ENV=ci DD_SERVICE=jest-tests npm test
+        working-directory: ./dashboard
+
