@@ -14,3 +14,18 @@ resource "datadog_monitor" "github_actions_failure_monitor" {
   
   priority = 2
 }
+
+resource "datadog_monitor" "frontend_test_failure_monitor" {
+  name = "Frontend Test Failure"
+  type = "ci-tests alert"
+  tags = ["team:cs489-rpts"]
+
+  message = "One or more frontend tests failed. Notifying @slack-datadog. Please investigate."
+  query = "ci-tests(\"test_level:test @test.status:fail env:ci @git.repository.id:\\\"github.com/lodestone-489/lodestone-project\\\" @test.service:jest-tests\").rollup(\"count\").last(\"5m\") >= 1"
+
+  monitor_thresholds {
+    critical = "1"
+  }
+ 
+  priority = 2
+}
